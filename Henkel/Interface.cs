@@ -16,13 +16,12 @@ namespace Henkel
 {
     internal class Interface
     {
-        // Initialize the interface
 
         // Initialize the main status bar of the interface
         private static StatusBar Status = new StatusBar(new StatusItem[] {
             new StatusItem(Key.F4 | Key.CtrlMask, "~Ctrl F4~ Exit", () => { Application.Top.Running = false; }),
             new StatusItem(Key.F2, "~F2~ Export", () => { }),
-            new StatusItem(Key.F5, "~F5~ Command", () => { }),
+            new StatusItem(Key.F5, "~F5~ Order", () => { }),
             new StatusItem(Key.F7, "~F7~ Settings", () => { }),
         })
         { ColorScheme = Colors.TopLevel };
@@ -44,7 +43,6 @@ namespace Henkel
             Y = 1,
             ColorScheme = Colors.TopLevel
         };
-
         private static Label FaultInputEndBorder = new Label("]")
         {
             X = Pos.Right(FaultInput),
@@ -52,6 +50,7 @@ namespace Henkel
             ColorScheme = Colors.TopLevel
         };
 
+        // Initialize all the basic elements of the interface required from the start
         public static void Initialize()
         {
             Application.Init(); // Initialize the application
