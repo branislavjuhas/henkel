@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "U+LPrCNqzSTn7+Cyc2CLwaGAw1SkolG/SgC/R3xpGyjfkbvuLRUBXfETMXpbZ0lBq9HNCrTRfnD7hA5YXrvilQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\juhas\\source\\repos\\Henkel\\Henkel\\Henkel.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\juhas\\.nuget\\packages\\nstack.core\\1.0.5\\nstack.core.1.0.5.nupkg.sha512",
+    "C:\\Users\\juhas\\.nuget\\packages\\system.valuetuple\\4.5.0\\system.valuetuple.4.5.0.nupkg.sha512",
+    "C:\\Users\\juhas\\.nuget\\packages\\terminal.gui\\1.8.2\\terminal.gui.1.8.2.nupkg.sha512"
+  ],
+  "logs": []
+}
