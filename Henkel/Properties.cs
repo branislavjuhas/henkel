@@ -14,6 +14,9 @@ namespace Henkel
 {
     class Properties
     {
+        public static void ShowDialog()
+        {
 
+        }
     }
 }
