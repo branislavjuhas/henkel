@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "U+LPrCNqzSTn7+Cyc2CLwaGAw1SkolG/SgC/R3xpGyjfkbvuLRUBXfETMXpbZ0lBq9HNCrTRfnD7hA5YXrvilQ==",
+  "dgSpecHash": "d/QHlDABs4qtDZ+tb/GJgNBfUMZagYSHGtMUY0hzh9eKgzaNC5un+riEVXLuMCZpjJRZt7ZARwUh8zc1M7MHzA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\juhas\\source\\repos\\Henkel\\Henkel\\Henkel.csproj",
+  "projectFilePath": "C:\\Users\\juhas\\Documents\\GitHub\\Henkel\\Henkel\\Henkel.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\juhas\\.nuget\\packages\\nstack.core\\1.0.5\\nstack.core.1.0.5.nupkg.sha512",
     "C:\\Users\\juhas\\.nuget\\packages\\system.valuetuple\\4.5.0\\system.valuetuple.4.5.0.nupkg.sha512",
