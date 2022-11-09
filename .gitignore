@@ -1,13 +1,2 @@
-.vscode/launch.json
-.vscode/tasks.json
-Henkel/obj/Debug/net6.0/Henkel.assets.cache
-Henkel/obj/Debug/net6.0/Henkel.GeneratedMSBuildEditorConfig.editorconfig
-Henkel/obj/Debug/net6.0/Henkel.assets.cache
-Henkel/obj/Debug/net6.0/Henkel.assets.cache
-Henkel/obj/Debug/net6.0/Henkel.GeneratedMSBuildEditorConfig.editorconfig
-Henkel/obj/Debug/net6.0/refint/Henkel.dll
-Henkel/obj/Debug/net6.0/ref/Henkel.dll
-Henkel/obj/Debug/net6.0/Henkel.pdb
-Henkel/obj/Debug/net6.0/Henkel.genruntimeconfig.cache
-Henkel/obj/Debug/net6.0/Henkel.dll
-*.dll
+**/.vscode
+**/bin
