@@ -89,5 +89,37 @@ namespace Henkel
             Interface.FaultInput.Enabled = false;
             Interface.Status.Enabled = false;
         }
+
+        // Assesses the data from order number input field and stores it into the variable 
+        // and generate text for the cabinet type input field
+        private void ExamineOrderNumber()
+        {
+            string firsts = OrderNumberInput.Text.ToString().Substring(0, 2);
+
+            // Chceck if firsts = 38 and if yes set the cabinet type to X Series
+            // Or if firsts = 20 set the cabinet type to Netstal series
+            if (OrderNumberInput.Text.Length == 8)
+            {
+                OrderNumber = OrderNumberInput.Text.ToString();
+                if (firsts == "38")
+                {
+                    CabinetType = "X Series";
+                }
+                else if (firsts == "20")
+                {
+                    CabinetType = "Netstal Series";
+                }
+                else
+                {
+                    CabinetType = "Unknown";
+                }
+            }
+            else
+            {
+                CabinetType = "Unknown";
+            }
+
+            CabinetTypeInput.Text = CabinetType;
+        }
     }
 }
