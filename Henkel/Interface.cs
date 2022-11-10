@@ -16,18 +16,19 @@ namespace Henkel
 {
     internal class Interface
     {
+        #region Variables
 
         // Initialize the main status bar of the interface
-        private static StatusBar Status = new StatusBar(new StatusItem[] {
+        public static StatusBar Status = new StatusBar(new StatusItem[] {
             new StatusItem(Key.F4 | Key.CtrlMask, "~Ctrl F4~ Exit", () => { Application.Top.Running = false; }),
             new StatusItem(Key.F2, "~F2~ Export", () => { }),
-            new StatusItem(Key.F5, "~F5~ Order", () => { }),
+            new StatusItem(Key.F5, "~F5~ Order", () => { Properties.ShowDialog(); }),
             new StatusItem(Key.F7, "~F7~ Settings", () => { }),
         })
         { ColorScheme = Colors.TopLevel };
 
         // Initialize the main input field for faults of the interface
-        private static TextField FaultInput = new TextField("")
+        public static TextField FaultInput = new TextField("")
         {
             X = 2,
             Y = 1,
@@ -49,6 +50,8 @@ namespace Henkel
             Y = 1,
             ColorScheme = Colors.TopLevel
         };
+
+        #endregion
 
         // Initialize all the basic elements of the interface required from the start
         public static void Initialize()
