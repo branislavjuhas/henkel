@@ -209,6 +209,20 @@ namespace Henkel
                         }
                         break;
                 }
+                
+                // If the e key is a letter, number, space or symbol and the classification input field is visible
+                // then resize the fault input field to fit its text and resize the classification input field to fit the whole remaining space
+
+                if (e.KeyEvent.KeyValue < 1000)
+                {
+                    char c = char.ConvertFromUtf32(e.KeyEvent.KeyValue)[0];
+
+                    if (ClassificationBasicsVisible)
+                    {
+                        FaultInput.Width = FaultInput.Text.Length + 2;
+                        ClassificationInput.Width = Dim.Fill(2);
+                    }
+                }
             };
 
             ClassificationInput.KeyPress += (e) =>
