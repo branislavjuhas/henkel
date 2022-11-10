@@ -53,12 +53,22 @@ namespace Henkel
             ColorScheme = Colors.Menu
         };
 
-        // Declares the cabinet type dropdown with its label
+        // Declares the cabinet type input field with its label
         private static Label CabinetTypeLabel = new Label("Cabinet type:")
         {
             X = 1,
             Y = 3,
             ColorScheme = Colors.TopLevel
+        };
+
+        private static TextField CabinetTypeInput = new TextField("")
+        {
+            X = Pos.Right(CabinetTypeLabel) + 1,
+            Y = 3,
+            Width = 14,
+            Height = 1,
+            ColorScheme = Colors.Menu,
+            Enabled = false
         };
 
         #endregion
@@ -70,7 +80,7 @@ namespace Henkel
             PropertiesDialog.Border.Effect3D = false;
 
             // Add the elements to the dialog
-            PropertiesDialog.Add(OrderNumberLabel, OrderNumberInput, CabinetTypeLabel, CabinetTypeDropdown);
+            PropertiesDialog.Add(OrderNumberLabel, OrderNumberInput, CabinetTypeLabel, CabinetTypeInput);
 
             // Add the dialog into the interface
             Application.Top.Add(PropertiesDialog);
