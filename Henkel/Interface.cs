@@ -19,7 +19,8 @@ namespace Henkel
         #region Variables
 
         private static bool NetstalCabinetVisible = false;
-        
+        private static bool ClassificationBasicsVisible = false;
+
         // Initializes the message status item to display the status of the program
         public static StatusItem MessageStatus = new StatusItem(Key.Null, "Ordern: Unknown", null);
 
@@ -41,6 +42,26 @@ namespace Henkel
             Width = Dim.Fill(2),
             Height = 1,
             ColorScheme = Colors.Menu
+        };
+
+        // Declare the subinput field for the basic classification
+        public static TextField ClassificationInput = new TextField("")
+        {
+            X = 2,
+            Y = 1,
+            Height = 1,
+            ColorScheme = Colors.Menu,
+            Visible = false
+        };
+
+        // Declare border for the basic classification
+        public static Label ClassifyBorder = new Label("|")
+        {
+            X = Pos.Right(FaultInput),
+            Y = 1,
+            Width = 1,
+            ColorScheme = Colors.TopLevel,
+            Visible = false
         };
 
         // Declare the subinput field for the netstal cabinet
@@ -75,6 +96,7 @@ namespace Henkel
         {
             X = Pos.Right(FaultInput),
             Y = 1,
+            Width = 1,
             ColorScheme = Colors.TopLevel
         };
 
@@ -84,7 +106,7 @@ namespace Henkel
         public static void Initialize()
         {
             Application.Init(); // Initialize the application
-            Application.Top.Add(Status, FaultInput, FaultInputBorder, FaultInputEndBorder, NetstalCabinetInput, NetstalBorder); // Add necessary components to the application
+            Application.Top.Add(Status, FaultInput, FaultInputBorder, FaultInputEndBorder, NetstalCabinetInput, NetstalBorder, ClassificationInput, ClassifyBorder); // Add necessary components to the application
             
             InitializeComponents();
             
@@ -94,6 +116,7 @@ namespace Henkel
         // Initialize components of the interface that cannot be initialized in the header
         public static void InitializeComponents()
         {
+
             NetstalCabinetInput.Visible = false;
             //Event handler for the fault input field
             FaultInput.KeyPress += (e) =>
@@ -114,13 +137,18 @@ namespace Henkel
                             FaultInput.Text = FaultInput.Text.ToString().Substring(2);
                             FaultInput.CursorPosition = 0;
                             FaultInput.X = Pos.Right(NetstalBorder) + 1;
-                            FaultInput.Width = Dim.Fill(2);
+                            
+                            if (!ClassificationBasicsVisible)
+                            {
+                                FaultInput.Width = Dim.Fill(2);
+                            }
 
                             NetstalBorder.Visible = true;
                             
                             e.Handled = true;
                         }
                         break;
+
                     case Key.Backspace:
 
                         // If the netstal field is visible and the cursor is at the beggining of the fault input field
@@ -132,22 +160,94 @@ namespace Henkel
                             NetstalCabinetInput.Visible = false;
                             NetstalCabinetInput.Text = "";
                             FaultInput.X = 2;
-                            FaultInput.Width = Dim.Fill(2);
                             NetstalBorder.Visible = false;
                             
+                            if (!ClassificationBasicsVisible)
+                            {
+                                FaultInput.Width = Dim.Fill(2);
+                            }
+
+                            e.Handled = true;
+                        }
+                        else if (FaultInput.CursorPosition > 0 && ClassificationBasicsVisible)
+                        {
+                            FaultInput.Width = FaultInput.Text.Length;
+                            ClassificationInput.Width = Dim.Fill(2);
+                        }
+                        break;
+
+                    case (Key)59: //Key.Semicolon
+                        
+                        // If the classification input field is not visible then make it visible, move cursor to the beggining of the classification input field,
+                        // resize the fault input to fit its text and resize the classification input to fit the whole remaining space and focus it
+                        if (!ClassificationBasicsVisible)
+                        {
+                            ClassificationBasicsVisible = true;
+                            ClassificationInput.Visible = true;
+                            ClassifyBorder.Visible = true;
+                            ClassificationInput.Text = FaultInput.Text.ToString().Substring(FaultInput.CursorPosition);
+                            ClassificationInput.CursorPosition = 0;
+                            FaultInput.Width = FaultInput.Text.Length + 1;
+                            ClassificationInput.X = Pos.Right(FaultInput) + 2;
+                            FaultInputEndBorder.X = Pos.Right(ClassificationInput);
+                            ClassificationInput.Width = Dim.Fill(2);
+                            ClassificationInput.SetFocus();
+                            
+                            e.Handled = true;
+                        }
+
+                        break;
+
+                    case Key.CursorRight:
+                        // If the cursor is at the end of the fault input field and the classification input field is visible
+                        // then move the cursor to the beggining of the classification input field
+                        if (FaultInput.CursorPosition == FaultInput.Text.Length && ClassificationBasicsVisible)
+                        {
+                            ClassificationInput.SetFocus();
+                            ClassificationInput.CursorPosition = 0;
                             e.Handled = true;
                         }
                         break;
                 }
-
             };
-        }
 
-        // This void is used for updating the fault input field during runtime
-        // Other subinputs can be added here
-        public static void UpdateFaultInput()
-        {
-            
+            ClassificationInput.KeyPress += (e) =>
+            {
+                switch (e.KeyEvent.Key)
+                {
+                    case Key.Backspace:
+
+                        // Else if the classification input field is visible and the cursor is at the beggining of the classification input field
+                        // then make the classification input field and its border invisible, resize the fault input field to fit all the interface
+                        // and move the cursor to the end of the fault input field
+                        if (ClassificationBasicsVisible && ClassificationInput.CursorPosition == 0)
+                        {
+                            ClassificationBasicsVisible = false;
+                            ClassificationInput.Visible = false;
+                            ClassifyBorder.Visible = false;
+                            FaultInput.Width = Dim.Fill(2);
+                            FaultInput.Text += ClassificationInput.Text;
+                            ClassificationInput.Text = "";
+                            FaultInput.CursorPosition = FaultInput.Text.Length;
+                            FaultInputEndBorder.X = Pos.Right(FaultInput);
+                            FaultInput.SetFocus();
+
+                            e.Handled = true;
+                        }
+                        break;
+
+                    case Key.CursorLeft:
+                        // If the cursor is at the beggining of the classification input field and the fault input field is visible
+                        // then move the cursor to the end of the fault input field
+                        if (ClassificationInput.CursorPosition == 0 && FaultInput.Visible)
+                        {
+                            FaultInput.SetFocus();
+                            FaultInput.CursorPosition = FaultInput.Text.Length;
+                            e.Handled = true;
+                        }
+                        break;
+                }
+            };
         }
     }
 }
