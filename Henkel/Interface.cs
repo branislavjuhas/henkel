@@ -10,7 +10,6 @@
  */
 
 using Terminal.Gui; // Terminal.Gui
-using NStack; // NStack
 
 namespace Henkel
 {
@@ -107,9 +106,9 @@ namespace Henkel
         {
             Application.Init(); // Initialize the application
             Application.Top.Add(Status, FaultInput, FaultInputBorder, FaultInputEndBorder, NetstalCabinetInput, NetstalBorder, ClassificationInput, ClassifyBorder); // Add necessary components to the application
-            
+
             InitializeComponents();
-            
+
             Application.Run(); // Run the application
         }
 
@@ -137,14 +136,14 @@ namespace Henkel
                             FaultInput.Text = FaultInput.Text.ToString().Substring(2);
                             FaultInput.CursorPosition = 0;
                             FaultInput.X = Pos.Right(NetstalBorder) + 1;
-                            
+
                             if (!ClassificationBasicsVisible)
                             {
                                 FaultInput.Width = Dim.Fill(2);
                             }
 
                             NetstalBorder.Visible = true;
-                            
+
                             e.Handled = true;
                         }
                         break;
@@ -161,7 +160,7 @@ namespace Henkel
                             NetstalCabinetInput.Text = "";
                             FaultInput.X = 2;
                             NetstalBorder.Visible = false;
-                            
+
                             if (!ClassificationBasicsVisible)
                             {
                                 FaultInput.Width = Dim.Fill(2);
@@ -177,7 +176,7 @@ namespace Henkel
                         break;
 
                     case (Key)59: //Key.Semicolon
-                        
+
                         // If the classification input field is not visible then make it visible, move cursor to the beggining of the classification input field,
                         // resize the fault input to fit its text and resize the classification input to fit the whole remaining space and focus it
                         if (!ClassificationBasicsVisible)
@@ -192,7 +191,7 @@ namespace Henkel
                             FaultInputEndBorder.X = Pos.Right(ClassificationInput);
                             ClassificationInput.Width = Dim.Fill(2);
                             ClassificationInput.SetFocus();
-                            
+
                             e.Handled = true;
                         }
 
@@ -209,7 +208,7 @@ namespace Henkel
                         }
                         break;
                 }
-                
+
                 // If the e key is a letter, number, space or symbol and the classification input field is visible
                 // then resize the fault input field to fit its text and resize the classification input field to fit the whole remaining space
 
