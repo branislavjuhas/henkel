@@ -1,7 +1,7 @@
 /*  This script is a part of the Henkel project
  *  Author: Branislav Juhás
  *  Date: 2022-11-9
- *  Last update: 2022-11-10
+ *  Last update: 2022-11-16
  *  
  *  --  File ( Interface.cs ) Description  --
  *
