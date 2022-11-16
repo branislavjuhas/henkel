@@ -170,7 +170,7 @@ namespace Henkel
                         }
                         else if (FaultInput.CursorPosition > 0 && ClassificationBasicsVisible)
                         {
-                            FaultInput.Width = FaultInput.Text.Length;
+                            FaultInput.Width = FaultInput.Text.Length - FaultInput.SelectedLength + 1;
                             ClassificationInput.Width = Dim.Fill(2);
                         }
                         break;
@@ -186,7 +186,7 @@ namespace Henkel
                             ClassifyBorder.Visible = true;
                             ClassificationInput.Text = FaultInput.Text.ToString().Substring(FaultInput.CursorPosition);
                             ClassificationInput.CursorPosition = 0;
-                            FaultInput.Width = FaultInput.Text.Length + 1;
+                            FaultInput.Width = FaultInput.Text.Length;
                             ClassificationInput.X = Pos.Right(FaultInput) + 2;
                             FaultInputEndBorder.X = Pos.Right(ClassificationInput);
                             ClassificationInput.Width = Dim.Fill(2);
