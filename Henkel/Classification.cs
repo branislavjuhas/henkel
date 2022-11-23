@@ -17,13 +17,13 @@ namespace Henkel
         public static string[] OriginalCauses = { "KMT Vorbereitung", "KMT Takt1", "KMT Takt2", "KMT Takt3", "KMT Takt4", "KMT Takt5", "KMT AV", "KMT EXTERN", "KMT Klemm Kasten", "KMT Lager", "KMT PRUFUNG", "KMT Schlosserei", "KMT Triatlon", "Konstruktion", "Software", "Lieferant ext.", "KMT Andere" };
 
         // Variables used for the classification in the Classification dropdown
-        public static string[][] Classifications = new string[16][];
-        public static string[][] OriginalClassifications = new string[16][];
-        public static int[][] ClassificationsPointers = new int[16][];
+        public static string[][] Classifications = new string[17][];
+        public static string[][] OriginalClassifications = new string[17][];
+        public static int[][] ClassificationsPointers = new int[17][];
 
         // Variables used for the classification in the Types dropdown
-        public static string[][] Types = new string[145][];
-        public static string[][] OriginalTypes = new string[145][];
+        public static string[][] Types = new string[146][];
+        public static string[][] OriginalTypes = new string[146][];
 
         // Function used to assign the classifications & the types to the arrays
         public static void Assign()
@@ -45,6 +45,7 @@ namespace Henkel
             Classifications[13] = new string[] { "Parts Registry", "Planned Function", "Planned Cross Reference", "Planned Cable Registry", "Planned Placement", "Planned Parts Registry", "Signals Registry" };
             Classifications[14] = new string[] { "Early Processing Fault", "Special Control Reference", "Order Completion", "Physical Values", "Information Problem", "Software Registry", "Serial Error", "Additional Device", "Sonder" };
             Classifications[15] = new string[] { "Component" };
+            Classifications[16] = new string[] { "Undefined Department" };
 
             // Assign the original classifications
             OriginalClassifications[0] = new string[] { "Kábel", "Popis Kábel", "Popis vnútorný", "Popis vonkajší", "Prepoj Kábel", "Prepoj vodič", "Spracovanie dutinka", "Spracovanie káblové očko", "Spracovanie odizolovanie", "Spracovanie pružinový kontakt", "Spracovanie pájkovanie", "Spracovanie skrutková svorka", "Súčiastka", "Tienenie", "Uloženie Kábel" };
@@ -63,6 +64,7 @@ namespace Henkel
             OriginalClassifications[13] = new string[] { "Kusovník", "Plán funkcia", "Plán krížový odkaz", "Plán káblový zoznam", "Plán osadenia", "Plán zoznam súčiastok", "Zoznam signálov" };
             OriginalClassifications[14] = new string[] { "Chyba zaprícinená predcasným spracovaním", "Dokumentácia špeciálne riadenie", "Doplnenie objednávky", "Fyzické hodnoty", "Problém s informáciou", "SW zoznam", "Sériová chyba", "prídavné zariadenie", "špecialita (sonder)" };
             OriginalClassifications[15] = new string[] { "Súčiastka" };
+            OriginalClassifications[16] = new string[] { "Nedefinované oddelenie" };
 
             // Assign the original classifications to the new classifications
             ClassificationsPointers[0] = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
@@ -79,8 +81,9 @@ namespace Henkel
             ClassificationsPointers[11] = new int[] { 121 };
             ClassificationsPointers[12] = new int[] { 122, 123, 124, 125, 126, 127 };
             ClassificationsPointers[13] = new int[] { 128, 129, 130, 131, 132, 133, 134 };
-            ClassificationsPointers[14] = new int[] { 136, 137, 138, 139, 140, 141, 142, 143, 144 };
-            ClassificationsPointers[15] = new int[] { 145 };
+            ClassificationsPointers[14] = new int[] { 135, 136, 137, 138, 139, 140, 141, 142, 143 };
+            ClassificationsPointers[15] = new int[] { 144 };
+            ClassificationsPointers[16] = new int[] { 145 };
 
             // Assign the new classifications to the original classifications
             Types[0] = new string[] { "Missing", "Long", "Short", "Demaged", "Wrong Bundle" };
@@ -228,6 +231,7 @@ namespace Henkel
             Types[142] = new string[] { "Missing", "Extra", "Wrong" };
             Types[143] = new string[] { "Missing", "Extra", "Wrong" };
             Types[144] = new string[] { "Missing", "Mechanically Demaged", "Wrong", "Electrically Demaged" };
+            Types[145] = new string[] { "Wrong/Missing" };
 
             // Assign the original types to the array
             OriginalTypes[0] = new string[] { "Chýba", "Dlhý", "Krátky", "Poškodený", "Zlý zväzok" };
@@ -375,6 +379,7 @@ namespace Henkel
             OriginalTypes[142] = new string[] { "Chýba", "Navyše", "Zlé" };
             OriginalTypes[143] = new string[] { "Chýba", "Navyše", "Zlý" };
             OriginalTypes[144] = new string[] { "Chýba", "Mechanicky poškodená", "Zlá", "elektircky poškodená" };
+            OriginalTypes[145] = new string[] { "Zlá/Chýba" };
         }
     }
 }
