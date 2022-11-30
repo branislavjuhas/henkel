@@ -25,6 +25,8 @@ namespace Henkel
         // Initialize the application
         static void Main(string[] args)
         {
+            Classification.Assign();
+
             Interface.Initialize();
         }
     }
