@@ -1,7 +1,7 @@
 ﻿/*  This script is a part of the Henkel project
  *  Author: Branislav Juhás
  *  Date: 2022-11-23
- *  Last update: 2022-11-30
+ *  Last update: 2022-12-02
  *  
  *  --  File ( Processing.cs ) Description  --
  *
@@ -63,11 +63,23 @@ namespace Henkel
                 Interface.ClassificationInput.Text = "";
             }
 
+            // Reset the fault input
+
             Interface.FaultInput.Width = Dim.Fill(2);
             Interface.FaultInput.Text = "";
             Interface.FaultInputBorder.X = 1;
             Interface.FaultInputEndBorder.X = Pos.Right(Interface.FaultInput);
-            Interface.FaultInput.SetFocus();
+
+            // If Pending list is not empty, call the FocusPending function
+            // else focus the fault input
+            if (Pending.Count > 0)
+            {
+                FocusPending();
+            }
+            else
+            {
+                Interface.FaultInput.SetFocus();
+            }
         }
 
         // Function to fill all the pending fields with fault
@@ -105,6 +117,92 @@ namespace Henkel
             Interface.PendingCauseInput.Visible = true;
             Interface.PendingClassificationInput.Visible = true;
             Interface.PendingTypeInput.Visible = true;
+            Interface.PendingApproveButton.Visible = true;
+        }
+
+        // Function to approve the pending fault
+        public static void Approve()
+        {
+            // Add the pending fault to the faults list of the henkel
+            // class and remove it form the pending list   
+
+            Program.Faults.Add(Faults[Pending[0]]);
+            Faults.RemoveAt(Pending[0]);
+            Pending.RemoveAt(0);
+
+            Interface.ProcessedFaults.Text = $"Processing Faults: {(Faults.Count - Pending.Count).ToString()}  |  Pending: {Pending.Count.ToString()}";
+
+            // If there are still pending faults, call the Rependate function
+            // else hide all the pending visual elements
+            if (Pending.Count > 0)
+            {
+                Rependate();
+                FocusPending();
+            }
+            else
+            {
+                Interface.PendingFaultInput.Visible = false;
+                Interface.PendingBMKInput.Visible = false;
+                Interface.PendingPlacementInput.Visible = false;
+                Interface.PendingOrderNumberInput.Visible = false;
+                Interface.PendingCauseInput.Visible = false;
+                Interface.PendingClassificationInput.Visible = false;
+                Interface.PendingTypeInput.Visible = false;
+                Interface.PendingApproveButton.Visible = false;
+            }
+        }
+
+        // Function to focus the pending fault ui elements
+        public static void FocusPending(int option = 7)
+        {
+            // If the option is 7 replace it with the option variable
+            if (option == 7) { option = Settings.OnPendingFocus; }
+
+            if (option == 0)
+            {
+                // Focus the PendingFaultInput
+                Interface.PendingFaultInput.SetFocus();
+            }
+            else if (option == 1)
+            {
+                // Focus the first empty field                
+                if (Interface.PendingFaultInput.Text.ToString() == "")
+                {
+                    Interface.PendingFaultInput.SetFocus();
+                }
+                else if (Interface.PendingBMKInput.Text.ToString() == "")
+                {
+                    Interface.PendingBMKInput.SetFocus();
+                }
+                else if (Interface.PendingPlacementInput.Text.ToString() == "")
+                {
+                    Interface.PendingPlacementInput.SetFocus();
+                }
+                else if (Interface.PendingOrderNumberInput.Text.ToString() == "")
+                {
+                    Interface.PendingOrderNumberInput.SetFocus();
+                }
+                else if (Interface.PendingCauseInput.Text.ToString() == "")
+                {
+                    Interface.PendingCauseInput.SetFocus();
+                }
+                else if (Interface.PendingClassificationInput.Text.ToString() == "")
+                {
+                    Interface.PendingClassificationInput.SetFocus();
+                }
+                else if (Interface.PendingTypeInput.Text.ToString() == "")
+                {
+                    Interface.PendingTypeInput.SetFocus();
+                }
+                else
+                {
+                    Interface.PendingApproveButton.SetFocus();
+                }
+            }
+            else if (option == 2)
+            {
+                Interface.PendingApproveButton.SetFocus();
+            }
         }
     }
 

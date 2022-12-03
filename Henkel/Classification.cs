@@ -1,7 +1,7 @@
 ﻿/*  This script is a part of the Henkel project
  *  Author: Branislav Juhás
  *  Date: 2022-11-23
- *  Last update: 2022-11-23
+ *  Last update: 2022-12-01
  *  
  *  --  File ( Classification.cs ) Description  --
  *

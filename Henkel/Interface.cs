@@ -1,7 +1,7 @@
 /*  This script is a part of the Henkel project
  *  Author: Branislav Juhás
  *  Date: 2022-11-9
- *  Last update: 2022-11-30
+ *  Last update: 2022-12-02
  *  
  *  --  File ( Interface.cs ) Description  --
  *
@@ -18,7 +18,7 @@ namespace Henkel
         #region Variables
 
         //Variable that globally indicates if the key is handled
-        private static bool KeyHandled = false;
+        public static bool KeyHandled = false;
 
         public static bool NetstalCabinetVisible = false;
         public static bool ClassificationBasicsVisible = false;
@@ -74,7 +74,8 @@ namespace Henkel
             Width = 4,
             Height = 1,
             ColorScheme = Colors.Menu,
-            Enabled = false
+            Enabled = false,
+            Visible = false
         };
 
         // Declare border for the netstal cabinet subinput field
@@ -201,6 +202,16 @@ namespace Henkel
             Visible = false
         };
 
+        // Initialize the input button for the aproving pending input
+        public static Button PendingApproveButton = new Button("Approve")
+        {
+            X = Pos.Right(PendingTypeInput) - 11,
+            Y = 11,
+            Height = 1,
+            ColorScheme = Colors.TopLevel,
+            Visible = false
+        };
+
         #endregion
 
         #endregion
@@ -213,7 +224,8 @@ namespace Henkel
             // Add necessary components to the application
             Application.Top.Add(Status, FaultInput, FaultInputBorder, FaultInputEndBorder, NetstalCabinetInput,
             NetstalBorder, ClassificationInput, ClassifyBorder, ProcessedFaults, PendingFaultInput, PendingBMKInput,
-            PendingPlacementInput, PendingOrderNumberInput, PendingCauseInput, PendingClassificationInput, PendingTypeInput);
+            PendingPlacementInput, PendingOrderNumberInput, PendingCauseInput, PendingClassificationInput, PendingTypeInput,
+            PendingApproveButton);
 
             InitializeComponents();
 
@@ -224,9 +236,28 @@ namespace Henkel
         public static void InitializeComponents()
         {
 
-            FaultsFrame.Border.BorderStyle = BorderStyle.None;
+            FaultsFrame.Border.BorderStyle = BorderStyle.None; // Remove the border of the faults frame
 
-            NetstalCabinetInput.Visible = false;
+            PendingApproveButton.Clicked += () => { Processing.Approve(); }; // Add the event handler for the approve button
+
+            // Event hanndler for PendingCauseInput dropdown on down arrow key press
+            PendingCauseInput.KeyPress += (e) =>
+            {
+                if (e.KeyEvent.Key == Key.CursorDown && !PendingCauseInput.IsShow) { PendingCauseInput.Expand(); e.Handled = true; }
+            };
+
+            // Event handler for PendingClassificationInput dropdown on down arrow key press
+            PendingClassificationInput.KeyPress += (e) =>
+            {
+                if (e.KeyEvent.Key == Key.CursorDown && !PendingClassificationInput.IsShow) { PendingClassificationInput.Expand(); e.Handled = true; }
+            };
+
+            // Event handler for PendingTypeInput dropdown on down arrow key press
+            PendingTypeInput.KeyPress += (e) =>
+            {
+                if (e.KeyEvent.Key == Key.CursorDown && !PendingTypeInput.IsShow) { PendingTypeInput.Expand(); e.Handled = true; }
+            };
+
             //Event handler for the fault input field
             FaultInput.KeyPress += (e) =>
             {
@@ -317,12 +348,6 @@ namespace Henkel
                             e.Handled = true;
                         }
                         break;
-
-                    case Key.Enter:
-                        Processing.Process();
-                        e.Handled = true;
-                        KeyHandled = true;
-                        break;
                 }
 
                 // If the e key is a letter, number, space or symbol and the classification input field is visible
@@ -339,6 +364,16 @@ namespace Henkel
                     }
                 }
                 KeyHandled = false;
+            };
+
+            FaultInput.KeyUp += (e) =>
+            {
+                if (e.KeyEvent.Key == Key.Enter)
+                {
+                    Processing.Process();
+                    e.Handled = true;
+                    KeyHandled = true;
+                }
             };
 
             ClassificationInput.KeyPress += (e) =>
@@ -376,10 +411,28 @@ namespace Henkel
                             e.Handled = true;
                         }
                         break;
-                    case Key.Enter:
-                        Processing.Process();
-                        break;
                 }
+            };
+
+            ClassificationInput.KeyUp += (e) =>
+            {
+                if (e.KeyEvent.Key == Key.Enter)
+                {
+                    Processing.Process();
+                    e.Handled = true;
+                }
+            };
+
+            // Handler for when the user changes input in the pending cause item input field
+            PendingCauseInput.Leave += (e) =>
+            {
+                if (PendingCauseInput.SelectedItem >= 0) { PendingClassificationInput.SetSource(Classification.Classifications[PendingCauseInput.SelectedItem]); }
+            };
+
+            // Handler for when the user changes input in the pending classification item input field
+            PendingClassificationInput.Leave += (e) =>
+            {
+                if (PendingClassificationInput.SelectedItem >= 0 ) { PendingTypeInput.SetSource(Classification.Types[Classification.ClassificationsPointers[PendingCauseInput.SelectedItem][PendingClassificationInput.SelectedItem]]); }
             };
         }
     }
