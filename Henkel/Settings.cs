@@ -16,5 +16,7 @@ namespace Henkel
         public static int UseDistances = 1;
         public static int DistancesLanguage = 1;
         public static int MaximalDistance = 3;
+        public static int CoDistance = 1;
+        public static string UserName = "JuhasB";
     }
 }

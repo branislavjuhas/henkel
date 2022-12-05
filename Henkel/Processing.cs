@@ -1,7 +1,7 @@
 ﻿/*  This script is a part of the Henkel project
  *  Author: Branislav Juhás
  *  Date: 2022-11-23
- *  Last update: 2022-12-02
+ *  Last update: 2022-12-05
  *  
  *  --  File ( Processing.cs ) Description  --
  *
@@ -30,7 +30,7 @@ namespace Henkel
 
             if (Properties.CabinetType == "Netstal Series")
             {
-                place = Interface.NetstalCabinetInput.Text.ToString();
+                place = Interface.NetstalCabinetInput.Text.ToString().Substring(1);
             }
             else
             {
@@ -38,7 +38,7 @@ namespace Henkel
             }
 
             Faults.Add(new Fault(Interface.FaultInput.Text.ToString(), Interface.ClassificationInput.Text.ToString(), Properties.OrderNumber, Properties.CabinetType, place));
-            Interface.ProcessedFaults.Text = $"Processing Faults: {(Faults.Count - Pending.Count).ToString()}  |  Pending: {Pending.Count.ToString()}";
+            Interface.ProcessedFaults.Text = $"Processing Faults: {(Faults.Count - Pending.Count).ToString()}  |  Pending: {Pending.Count.ToString()}  |  Finished: {(Export.NetsalFaults.Count + Export.Xfaults.Count + Export.UndefinedFaults.Count).ToString()}";
 
             Monie.Compute(Faults[Faults.Count - 1]);
 
@@ -97,7 +97,7 @@ namespace Henkel
                 Interface.PendingCauseInput.SelectedItem = pender.CauseIndex;
                 Interface.PendingClassificationInput.SetSource(Classification.Classifications[pender.CauseIndex]);
 
-                if (pender.Classification != "")
+                if (pender.Classifications != "")
                 {
                     Interface.PendingClassificationInput.SelectedItem = pender.ClassificationIndex;
                     Interface.PendingTypeInput.SetSource(Classification.Types[Classification.ClassificationsPointers[pender.CauseIndex][pender.ClassificationIndex]]);
@@ -126,11 +126,25 @@ namespace Henkel
             // Add the pending fault to the faults list of the henkel
             // class and remove it form the pending list   
 
-            Program.Faults.Add(Faults[Pending[0]]);
+            if (Faults[Pending[0]].Series == "Netstal Series")
+            {
+                Export.NetsalFaults.Add(Faults[Pending[0]]);
+            }
+            else if (Faults[Pending[0]].Series == "X Series")
+            {
+                Export.Xfaults.Add(Faults[Pending[0]]);
+            }
+            else
+            {
+                Export.UndefinedFaults.Add(Faults[Pending[0]]);
+            }
+
             Faults.RemoveAt(Pending[0]);
             Pending.RemoveAt(0);
 
-            Interface.ProcessedFaults.Text = $"Processing Faults: {(Faults.Count - Pending.Count).ToString()}  |  Pending: {Pending.Count.ToString()}";
+            Interface.ProcessedFaults.Text = $"Processing Faults: {(Faults.Count - Pending.Count).ToString()}  |  Pending: {Pending.Count.ToString()}  |  Finished: {(Export.NetsalFaults.Count + Export.Xfaults.Count + Export.UndefinedFaults.Count).ToString()}";
+
+            ClearPending();
 
             // If there are still pending faults, call the Rependate function
             // else hide all the pending visual elements
@@ -149,7 +163,20 @@ namespace Henkel
                 Interface.PendingClassificationInput.Visible = false;
                 Interface.PendingTypeInput.Visible = false;
                 Interface.PendingApproveButton.Visible = false;
+                Interface.FaultInput.SetFocus();
             }
+        }
+
+        // This void is used to clear all visual elements of pending fields
+        public static void ClearPending()
+        {
+            Interface.PendingCauseInput.Text = "";
+            Interface.PendingCauseInput.Collapse();
+            Interface.PendingClassificationInput.SetSource(new List<string>());
+            Interface.PendingClassificationInput.Collapse();
+            Interface.PendingTypeInput.SetSource(new List<string>());
+            Interface.PendingTypeInput.Collapse();
+
         }
 
         // Function to focus the pending fault ui elements
@@ -217,7 +244,7 @@ namespace Henkel
         public string FaultText = "";
 
         public string Cause = "";
-        public string Classification = "";
+        public string Classifications = "";
         public string Type = "";
 
         public string Cache = "";
@@ -235,8 +262,15 @@ namespace Henkel
             Placement = placement;
             BMK = bmk;
             Cause = cause;
-            Classification = classification;
+            Classifications = classification;
             Type = type;
+        }
+
+        public override string ToString()
+        {
+            // Generate the fault string to export
+
+            return $"{OrderNumber}\t{Placement}\t{FaultText}\t{BMK}\t{Classification.OriginalCauses[CauseIndex]}\t{Classification.OriginalClassifications[CauseIndex][ClassificationIndex]}\t{Classification.OriginalTypes[Classification.ClassificationsPointers[CauseIndex][ClassificationIndex]][TypeIndex]}";
         }
     }
 }

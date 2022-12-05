@@ -1,7 +1,7 @@
 /*  This script is a part of the Henkel project
  *  Author: Branislav Juhás
  *  Date: 2022-11-30
- *  Last update: 2022-12-03
+ *  Last update: 2022-12-05
  *  
  *  --  File ( Monie.cs ) Description  --
  *
@@ -13,7 +13,7 @@ namespace Henkel
     internal class Monie
     {
         public static string Version = "1.1.2";
-        
+
         // Compute the missing information
         public static void Compute(Fault fault)
         {
@@ -43,25 +43,53 @@ namespace Henkel
                     fault.Cause = longword;
                     fault.CauseIndex = Array.IndexOf(Classification.Causes, longword);
                 }
-                else if (fault.Cause != "" && fault.Classification == "" && Classification.Classifications[fault.CauseIndex].Contains(longword))
+                else if (fault.Cause != "" && fault.Classifications == "" && Classification.Classifications[fault.CauseIndex].Contains(longword))
                 {
-                    fault.Classification = longword;
+                    fault.Classifications = longword;
                     fault.ClassificationIndex = Array.IndexOf(Classification.Classifications[fault.CauseIndex], longword);
                 }
-                else if (fault.Cause != "" && fault.Classification != "" && Classification.Types[Classification.ClassificationsPointers[fault.CauseIndex][fault.ClassificationIndex]].Contains(longword))
+                else if (fault.Cause != "" && fault.Classifications != "" && Classification.Types[Classification.ClassificationsPointers[fault.CauseIndex][fault.ClassificationIndex]].Contains(longword))
                 {
                     fault.Type = longword;
                     fault.TypeIndex = Array.IndexOf(Classification.Types[Classification.ClassificationsPointers[fault.CauseIndex][fault.ClassificationIndex]], longword);
                 }
+                else if (word.Length >= 2 && word[0] == '.' && word.Substring(1).All(char.IsDigit))
+                {
+                    // If the first character of the word is '/' and all the others are numeric values
+                    // Chceck if the numeric value after that first '/' is within length of array of 
+                    // fault's words and if yes, set word of fault's text at the numeric value index as a BMK
+                    int index = int.Parse(word.Substring(1));
 
+                    string[] words = fault.FaultText.Split(' ');
+
+                    if (index <= words.Length && index > 0)
+                    {
+                        fault.BMK = words[index - 1].ToUpper();
+                    }
+                }
+                else if (word.Length >= 2 && word[word.Length - 1] == '.' && word.Substring(0, word.Length - 1).All(char.IsDigit))
+                {
+                    // If the first character of the word is '/' and all the others are numeric values
+                    // Chceck if the numeric value after that first '/' is within length of array of 
+                    // fault's words and if yes, set word from right side of fault's text at the numeric value index as a BMK
+                    int index = int.Parse(word.Substring(0, word.Length - 1));
+
+                    string[] words = fault.FaultText.Split(' ');
+
+                    if (index <= words.Length && index > 0)
+                    {
+                        fault.BMK = words[words.Length - index].ToUpper();
+                    }
+                }
                 else if (fault.BMK == "")
                 {
-                    fault.BMK = word;
+
+                    fault.BMK = word.ToUpper();
                 }
             }
 
             // If some of the information is missing except the Order Number, Cabinet Type and Cabinet Number and the user wants to use the distances, compute the distances
-            if ((fault.Classification == "" || fault.Type == "") && Settings.UseDistances == 1 && fault.Cause != "")
+            if ((fault.Classifications == "" || fault.Type == "") && Settings.UseDistances == 1 && fault.Cause != "")
             {
                 int minimalDistance = 1000;
                 int minimalDistanceIndex = 0;
@@ -71,7 +99,7 @@ namespace Henkel
                 string[] words = fault.FaultText.Split(' ');
 
                 int y = 0;
-                if (fault.Classification == "")
+                if (fault.Classifications == "")
                 {
                     foreach (string rawword in words)
                     {
@@ -85,29 +113,28 @@ namespace Henkel
                         // else, use the original list of classifications
                         if (Settings.DistancesLanguage == 0)
                         {
-                            classificationsList = Classification.Classifications[fault.CauseIndex];
+                            classificationsList = Classification.AutomaticClassifications[fault.CauseIndex];
                         }
                         else
                         {
-                            classificationsList = Classification.OriginalClassifications[fault.CauseIndex];
+                            classificationsList = Classification.OriginalAutomaticClassifications[fault.CauseIndex];
                         }
 
 
 
                         foreach (string rawclassification in classificationsList)
                         {
-                            string rc = "";
+                            int distance = 1000;
+                            string classification = rawclassification.ToLower();
                             if (rawclassification.Contains(' '))
                             {
-                                rc = rawclassification.Substring(rawclassification.IndexOf(' '));
+                                distance = MultiCoCompute(fault.FaultText.ToLower(), classification) - 1;
                             }
                             else
                             {
-                                rc = rawclassification;
+                                distance = GetDamerauLevenshteinDistance(word, classification);
                             }
 
-                            string classification = rc.ToLower();
-                            int distance = GetDamerauLevenshteinDistance(word, classification);
 
                             if (distance < minimalDistance)
                             {
@@ -124,13 +151,13 @@ namespace Henkel
 
                     if (minimalDistance <= Settings.MaximalDistance)
                     {
-                        fault.Classification = Classification.Classifications[fault.CauseIndex][minimalDistanceOption];
+                        fault.Classifications = Classification.Classifications[fault.CauseIndex][minimalDistanceOption];
                         fault.ClassificationIndex = minimalDistanceOption;
                     }
                 }
 
                 // If the distance is less or equal than Settings.MaximalDistance, apply the classification
-                if (fault.Classification != "")
+                if (fault.Classifications != "")
                 {
                     minimalDistance = 1000;
                     minimalDistanceIndex = 0;
@@ -188,10 +215,64 @@ namespace Henkel
 
 
             Processing.Pending.Add(Processing.Faults.IndexOf(fault));
-            Interface.ProcessedFaults.Text = $"Processing Faults: {(Processing.Faults.Count - Processing.Pending.Count).ToString()}  |  Pending: {Processing.Pending.Count.ToString()}";
+            Interface.ProcessedFaults.Text = $"Processing Faults: {(Processing.Faults.Count - Processing.Pending.Count).ToString()}  |  Pending: {Processing.Pending.Count.ToString()}  |  Finished: {(Export.NetsalFaults.Count + Export.Xfaults.Count + Export.UndefinedFaults.Count).ToString()}";
 
             // Repend if necessary
             if (Processing.Pending.Count == 1) { Processing.Rependate(); }
+        }
+
+        public static int MultiCoCompute(string faultText, string classify)
+        {
+            int changes = 0;
+
+            // Chceck each word in the classify string and find the most 
+            // similar word in the faultText string using the Damerau-Levenshtein distance
+            // and add the difference to the changes variable
+
+            string[] words = classify.Split(' ');
+
+            int y = 0;
+
+            foreach (string word in words)
+            {
+                int minimalDistance = 1000;
+                int minimalDistanceIndex = 0;
+                int minimalDistanceOption = 0;
+
+                int x = 0;
+
+                string[] words2 = faultText.Split(' ');
+
+                foreach (string word2 in words2)
+                {
+                    int distance = GetDamerauLevenshteinDistance(word, word2);
+
+                    if (distance < minimalDistance)
+                    {
+                        minimalDistance = distance;
+                        minimalDistanceIndex = y;
+                        minimalDistanceOption = x;
+                    }
+
+                    x++;
+                }
+
+                y++;
+
+                changes += minimalDistance;
+
+            }
+
+            changes /= words.Length;
+
+            // If the changes are less or equal than Settings.CoDistance, subtract 3 from the changes
+            // variable, so it will be chosen as the most similar classification
+            if (changes <= Settings.CoDistance)
+            {
+                changes -= 3;
+            }
+
+            return changes;
         }
 
         public static int GetDamerauLevenshteinDistance(string s, string t)

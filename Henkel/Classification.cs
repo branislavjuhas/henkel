@@ -1,7 +1,7 @@
 ﻿/*  This script is a part of the Henkel project
  *  Author: Branislav Juhás
  *  Date: 2022-11-23
- *  Last update: 2022-12-01
+ *  Last update: 2022-12-05
  *  
  *  --  File ( Classification.cs ) Description  --
  *
@@ -23,6 +23,9 @@ namespace Henkel
         // Variables used for the classification in the Classification dropdown
         public static string[][] Classifications = new string[17][];
         public static string[][] OriginalClassifications = new string[17][];
+
+        public static string[][] AutomaticClassifications = new string[17][];
+        public static string[][] OriginalAutomaticClassifications = new string[17][];
         public static int[][] ClassificationsPointers = new int[17][];
 
         // Variables used for the classification in the Types dropdown
@@ -69,6 +72,44 @@ namespace Henkel
             OriginalClassifications[14] = new string[] { "Chyba zaprícinená predcasným spracovaním", "Dokumentácia špeciálne riadenie", "Doplnenie objednávky", "Fyzické hodnoty", "Problém s informáciou", "SW zoznam", "Sériová chyba", "prídavné zariadenie", "špecialita (sonder)" };
             OriginalClassifications[15] = new string[] { "Súčiastka" };
             OriginalClassifications[16] = new string[] { "Nedefinované oddelenie" };
+
+            // Assign the automatic classifications used by MONIE engine
+            AutomaticClassifications[0] = new string[] { "Cable", "Cable Labeling", "Internal Labeling", "External Labeling", "Cable", "Wire", "Ferrule", "Cable Eye", "Stripping", "Spring Contact", "Soldering", "Screw Clamp", "Component", "Shielding", "Cable Placement" };
+            AutomaticClassifications[1] = new string[] { "Cable Labeling", "Internal Labeling", "External Labeling", "Cable", "Wire", "Ferrule", "Cable Eye", "Stripping", "Spring Contact", "Soldering", "Screw Clamp", "Component", "Shielding", "Cable Placement" };
+            AutomaticClassifications[2] = new string[] { "Cable Labeling", "Internal Labeling", "External Labeling", "Cable", "Wire", "Ferrule", "Cable Eye", "Stripping", "Spring Contact", "Soldering", "Screw Clamp", "Component", "Shielding", "Cable Placement" };
+            AutomaticClassifications[3] = new string[] { "Cable Labeling", "Internal Labeling", "External Labeling", "Cable", "Wire", "Ferrule", "Cable Eye", "Stripping", "Spring Contact", "Soldering", "Screw Clamp", "Component", "Shielding", "Cable Placement" };
+            AutomaticClassifications[4] = new string[] { "Cable Labeling", "Internal Labeling", "External Labeling", "Cable", "Wire", "Ferrule", "Cable Eye", "Stripping", "Spring Contact", "Soldering", "Screw Clamp", "Component", "Shielding", "Cable Placement" };
+            AutomaticClassifications[5] = new string[] { "Cable Labeling", "Control Labeling", "Internal Labeling", "External Labeling", "Cable", "Wire", "Ferrule", "Cable Eye", "Stripping", "Spring Contact", "Soldering", "Screw Clamp", "Component", "Shielding", "Cable Placement" };
+            AutomaticClassifications[6] = new string[] { "Information", "Cable Registry", "Component" };
+            AutomaticClassifications[7] = new string[] { "Cable Labeling", "Control Labeling", "Internal Labeling", "External Labeling", "Cable", "Wire", "Ferrule", "Cable Eye", "Stripping", "Spring Contact", "Soldering", "Screw Clamp", "Component", "Shielding", "Cable Placement" };
+            AutomaticClassifications[8] = new string[] { "Cable Labeling", "Internal Labeling", "External Labeling", "Cable", "Wire", "Ferrule", "Cable Eye", "Stripping", "Spring Contact", "Soldering", "Screw Clamp", "Component", "Shielding", "Cable Placement" };
+            AutomaticClassifications[9] = new string[] { "Cart Fault", "Component" };
+            AutomaticClassifications[10] = new string[] { "Testing Fault" };
+            AutomaticClassifications[11] = new string[] { "Locksmith Fault" };
+            AutomaticClassifications[12] = new string[] { "Cable Labeling", "Wire Labeling", "Ferrule", "Stripping", "Component", "Wire" };
+            AutomaticClassifications[13] = new string[] { "Parts Registry", "Planned Function", "Planned Cross Reference", "Planned Cable Registry", "Planned Placement", "Planned Parts Registry", "Signals Registry" };
+            AutomaticClassifications[14] = new string[] { "Early Processing Fault", "Special Control Reference", "Order Completion", "Physical Values", "Information Problem", "Software Registry", "Serial Error", "Additional Device", "Sonder" };
+            AutomaticClassifications[15] = new string[] { "Component" };
+            AutomaticClassifications[16] = new string[] { "Undefined Department" };
+            // Assign the automatic original classifications used by MONIE engine
+            OriginalAutomaticClassifications[0] = new string[] { "Kábel", "Popis Kábel", "Popis vnútorný", "Popis vonkajší", "Kábel", "Vodič", "Spracovanie dutinka", "Spracovanie káblové očko", "Spracovanie odizolovanie", "Spracovanie pružinový kontakt", "Spracovanie pájkovanie", "Spracovanie skrutková svorka", "Súčiastka", "Tienenie", "Uloženie Kábel" };
+            OriginalAutomaticClassifications[1] = new string[] { "Popis Kábel", "Popis vnútorný", "Popis vonkajší", "Kábel", "Vodič", "Spracovanie dutinka", "Spracovanie káblové očko", "Spracovanie odizolovanie", "Spracovanie pružinový kontakt", "Spracovanie pájkovanie", "Spracovanie skrutková svorka", "Súčiastka", "Tienenie", "Uloženie Kábel" };
+            OriginalAutomaticClassifications[2] = new string[] { "Popis Kábel", "Popis vnútorný", "Popis vonkajší", "Kábel", "Vodič", "Spracovanie dutinka", "Spracovanie káblové očko", "Spracovanie odizolovanie", "Spracovanie pružinový kontakt", "Spracovanie pájkovanie", "Spracovanie skrutková svorka", "Súčiastka", "Tienenie", "Uloženie Kábel" };
+            OriginalAutomaticClassifications[3] = new string[] { "Popis Kábel", "Popis vnútorný", "Popis vonkajší", "Kábel", "Vodič", "Spracovanie dutinka", "Spracovanie káblové očko", "Spracovanie odizolovanie", "Spracovanie pružinový kontakt", "Spracovanie pájkovanie", "Spracovanie skrutková svorka", "Súčiastka", "Tienenie", "Uloženie Kábel" };
+            OriginalAutomaticClassifications[4] = new string[] { "Popis Kábel", "Popis vnútorný", "Popis vonkajší", "Kábel", "Vodič", "Spracovanie dutinka", "Spracovanie káblové očko", "Spracovanie odizolovanie", "Spracovanie pružinový kontakt", "Spracovanie pájkovanie", "Spracovanie skrutková svorka", "Súčiastka", "Tienenie", "Uloženie Kábel" };
+            OriginalAutomaticClassifications[5] = new string[] { "Popis Kábel", "Popis ovládanie", "Popis vnútorný", "Popis vonkajší", "Kábel", "Vodič", "Spracovanie dutinka", "Spracovanie káblové očko", "Spracovanie odizolovanie", "Spracovanie pružinový kontakt", "Spracovanie pájkovanie", "Spracovanie skrutková svorka", "Súčiastka", "Tienenie", "Uloženie Kábel" };
+            OriginalAutomaticClassifications[6] = new string[] { "Informácia", "Káblový zoznam", "Súčiastka" };
+            OriginalAutomaticClassifications[7] = new string[] { "Popis Kábel", "Popis ovládanie", "Popis vnútorný", "Popis vonkajší", "Kábel", "Vodič", "Spracovanie dutinka", "Spracovanie káblové očko", "Spracovanie odizolovanie", "Spracovanie pružinový kontakt", "Spracovanie pájkovanie", "Spracovanie skrutková svorka", "Súčiastka", "Tienenie", "Uloženie Kábel" };
+            OriginalAutomaticClassifications[8] = new string[] { "Popis Kábel", "Popis vnútorný", "Popis vonkajší", "Kábel", "Vodič", "Spracovanie dutinka", "Spracovanie káblové očko", "Spracovanie odizolovanie", "Spracovanie pružinový kontakt", "Spracovanie pájkovanie", "Spracovanie skrutková svorka", "Súčiastka", "Tienenie", "Uloženie Kábel" };
+            OriginalAutomaticClassifications[9] = new string[] { "Chyba vozíka", "Súčiastka" };
+            OriginalAutomaticClassifications[10] = new string[] { "Chyby kontroly" };
+            OriginalAutomaticClassifications[11] = new string[] { "Chyby zámočne" };
+            OriginalAutomaticClassifications[12] = new string[] { "Popis Kábel", "Popis vodič", "Spracovanie dutinka", "Spracovanie odizolovanie", "Súčiastka", "vodič" };
+            OriginalAutomaticClassifications[13] = new string[] { "Kusovník", "Plán funkcia", "Plán krížový odkaz", "Plán káblový zoznam", "Plán osadenia", "Plán zoznam súčiastok", "Zoznam signálov" };
+            OriginalAutomaticClassifications[14] = new string[] { "Chyba zaprícinená predcasným spracovaním", "Dokumentácia špeciálne riadenie", "Doplnenie objednávky", "Fyzické hodnoty", "Problém s informáciou", "SW zoznam", "Sériová chyba", "prídavné zariadenie", "špecialita (sonder)" };
+            OriginalAutomaticClassifications[15] = new string[] { "Súčiastka" };
+            OriginalAutomaticClassifications[16] = new string[] { "Nedefinované oddelenie" };
+
 
             // Assign the original classifications to the new classifications
             ClassificationsPointers[0] = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };

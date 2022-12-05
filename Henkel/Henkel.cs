@@ -20,8 +20,6 @@ namespace Henkel
 
         public static string Version = "1.0";
 
-        public static List<Fault> Faults = new List<Fault>();
-
         #endregion
 
         // Initialize the application

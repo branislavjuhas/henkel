@@ -1,7 +1,7 @@
 /*  This script is a part of the Henkel project
  *  Author: Branislav Juhás
  *  Date: 2022-11-9
- *  Last update: 2022-12-02
+ *  Last update: 2022-12-04
  *  
  *  --  File ( Interface.cs ) Description  --
  *
@@ -29,7 +29,7 @@ namespace Henkel
         // Initialize the main status bar of the interface
         public static StatusBar Status = new StatusBar(new StatusItem[] {
             new StatusItem(Key.F4 | Key.CtrlMask, "~Ctrl F4~ Exit", () => { Application.Top.Running = false; }),
-            new StatusItem(Key.F2, "~F2~ Export", () => { }),
+            new StatusItem(Key.F2, "~F2~ Export", () => { Export.ExportDialog(); }),
             new StatusItem(Key.F5, "~F5~ Order", () => { Properties.ShowDialog(); }),
             new StatusItem(Key.F7, "~F7~ Settings", () => { }),
             MessageStatus
@@ -114,7 +114,7 @@ namespace Henkel
         };
 
         // Initialize the label that displays number of processed and pending faults
-        public static Label ProcessedFaults = new Label("Processing Faults: 0  |  Pending: 0")
+        public static Label ProcessedFaults = new Label("Processing Faults: 0  |  Pending: 0  | Finished: 0")
         {
             X = 1,
             Y = 3,
@@ -432,7 +432,7 @@ namespace Henkel
             // Handler for when the user changes input in the pending classification item input field
             PendingClassificationInput.Leave += (e) =>
             {
-                if (PendingClassificationInput.SelectedItem >= 0 ) { PendingTypeInput.SetSource(Classification.Types[Classification.ClassificationsPointers[PendingCauseInput.SelectedItem][PendingClassificationInput.SelectedItem]]); }
+                if (PendingClassificationInput.SelectedItem >= 0) { PendingTypeInput.SetSource(Classification.Types[Classification.ClassificationsPointers[PendingCauseInput.SelectedItem][PendingClassificationInput.SelectedItem]]); }
             };
         }
     }
