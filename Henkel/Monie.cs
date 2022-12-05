@@ -215,7 +215,7 @@ namespace Henkel
 
 
             Processing.Pending.Add(Processing.Faults.IndexOf(fault));
-            Interface.ProcessedFaults.Text = $"Processing Faults: {(Processing.Faults.Count - Processing.Pending.Count).ToString()}  |  Pending: {Processing.Pending.Count.ToString()}  |  Finished: {(Export.NetsalFaults.Count + Export.Xfaults.Count + Export.UndefinedFaults.Count).ToString()}";
+            Interface.ProcessedFaults.Text = $"Processing Faults: {(Processing.Faults.Count - Processing.Pending.Count).ToString()}  |  Pending: {Processing.Pending.Count.ToString()}  |  Finished: {(Export.NetsalFaults.Count + Export.XFaults.Count + Export.UndefinedFaults.Count).ToString()}";
 
             // Repend if necessary
             if (Processing.Pending.Count == 1) { Processing.Rependate(); }

@@ -38,7 +38,7 @@ namespace Henkel
             }
 
             Faults.Add(new Fault(Interface.FaultInput.Text.ToString(), Interface.ClassificationInput.Text.ToString(), Properties.OrderNumber, Properties.CabinetType, place));
-            Interface.ProcessedFaults.Text = $"Processing Faults: {(Faults.Count - Pending.Count).ToString()}  |  Pending: {Pending.Count.ToString()}  |  Finished: {(Export.NetsalFaults.Count + Export.Xfaults.Count + Export.UndefinedFaults.Count).ToString()}";
+            Interface.ProcessedFaults.Text = $"Processing Faults: {(Faults.Count - Pending.Count).ToString()}  |  Pending: {Pending.Count.ToString()}  |  Finished: {(Export.NetsalFaults.Count + Export.XFaults.Count + Export.UndefinedFaults.Count).ToString()}";
 
             Monie.Compute(Faults[Faults.Count - 1]);
 
@@ -132,7 +132,7 @@ namespace Henkel
             }
             else if (Faults[Pending[0]].Series == "X Series")
             {
-                Export.Xfaults.Add(Faults[Pending[0]]);
+                Export.XFaults.Add(Faults[Pending[0]]);
             }
             else
             {
@@ -142,7 +142,7 @@ namespace Henkel
             Faults.RemoveAt(Pending[0]);
             Pending.RemoveAt(0);
 
-            Interface.ProcessedFaults.Text = $"Processing Faults: {(Faults.Count - Pending.Count).ToString()}  |  Pending: {Pending.Count.ToString()}  |  Finished: {(Export.NetsalFaults.Count + Export.Xfaults.Count + Export.UndefinedFaults.Count).ToString()}";
+            Interface.ProcessedFaults.Text = $"Processing Faults: {(Faults.Count - Pending.Count).ToString()}  |  Pending: {Pending.Count.ToString()}  |  Finished: {(Export.NetsalFaults.Count + Export.XFaults.Count + Export.UndefinedFaults.Count).ToString()}";
 
             ClearPending();
 

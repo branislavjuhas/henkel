@@ -19,7 +19,7 @@ namespace Henkel
         #region Variables
 
         public static List<Fault> NetsalFaults = new List<Fault>();
-        public static List<Fault> Xfaults = new List<Fault>();
+        public static List<Fault> XFaults = new List<Fault>();
         public static List<Fault> UndefinedFaults = new List<Fault>();
 
         public static string XHeader = "HUGQMEWzWBNqOXbKdeEDEzMGtLeDFCEGXebNEoVpKyzRZEPRUJLLreDEUuwVNqhubKkLbfERlKnLDFCyEoCAmNZBjZKjqSdEbjvw\r\n"
@@ -91,20 +91,36 @@ namespace Henkel
             {
                 if (Netstal)
                 {
-                    ExportFaults(NetsalFaults.ToArray(), 1, FileNameInput.Text.ToString() + ".kmtn");
-                    NetsalFaults.Clear();
+                    if (Undef)
+                    {
+                        ExportFaults(UndefinedFaults.ToArray(), 1, FileNameInput.Text.ToString() + ".kmtn");
+                        UndefinedFaults.Clear();
+                    }
+                    else
+                    {
+                        ExportFaults(NetsalFaults.ToArray(), 1, FileNameInput.Text.ToString() + ".kmtn");
+                        NetsalFaults.Clear();
+                    }
                 }
                 else
                 {
-                    ExportFaults(Xfaults.ToArray(), 0, FileNameInput.Text.ToString() + ".kmtx");
-                    Xfaults.Clear();
+                    if (Undef)
+                    {
+                        ExportFaults(UndefinedFaults.ToArray(), 0, FileNameInput.Text.ToString() + ".kmtu");
+                        UndefinedFaults.Clear();
+                    }
+                    else
+                    {
+                        ExportFaults(XFaults.ToArray(), 0, FileNameInput.Text.ToString() + ".kmt");
+                        XFaults.Clear();
+                    }
                 }
 
                 Application.Top.Remove(Exporter);
-                Interface.ProcessedFaults.Text = $"Processing Faults: {(Processing.Faults.Count - Processing.Pending.Count).ToString()}  |  Pending: {Processing.Pending.Count.ToString()}  |  Finished: {(Export.NetsalFaults.Count + Export.Xfaults.Count + Export.UndefinedFaults.Count).ToString()}";
+                Interface.ProcessedFaults.Text = $"Processing Faults: {(Processing.Faults.Count - Processing.Pending.Count).ToString()}  |  Pending: {Processing.Pending.Count.ToString()}  |  Finished: {(Export.NetsalFaults.Count + Export.XFaults.Count + Export.UndefinedFaults.Count).ToString()}";
             };
 
-            CancelButton.Clicked += () => 
+            CancelButton.Clicked += () =>
             {
                 Application.Top.Remove(Exporter);
             };
@@ -122,7 +138,7 @@ namespace Henkel
                 Exporter.SetFocus();
                 FileNameInput.SetFocus();
             }
-            if (Xfaults.Count > 0)
+            if (XFaults.Count > 0)
             {
                 BorderLabelEnd.Text = "] + .kmtx";
                 Netstal = false;
@@ -147,13 +163,15 @@ namespace Henkel
                     Netstal = true;
                 }
 
+                Undef = true;
+
                 Application.Top.Add(Exporter);
                 Exporter.SetFocus();
                 FileNameInput.SetFocus();
             }
 
             // If there are no faults to export, display a message
-            else if (NetsalFaults.Count == 0 && Xfaults.Count == 0 && UndefinedFaults.Count == 0)
+            else if (NetsalFaults.Count == 0 && XFaults.Count == 0 && UndefinedFaults.Count == 0)
 
             {
                 MessageBox.ErrorQuery("Error", "There are no faults to export.", "OK");
