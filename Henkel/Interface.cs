@@ -246,6 +246,15 @@ namespace Henkel
                 if (e.KeyEvent.Key == Key.CursorDown && !PendingCauseInput.IsShow) { PendingCauseInput.Expand(); e.Handled = true; }
             };
 
+            // Event handler for application's key press
+            Application.Top.KeyPress += (e) =>
+            {
+                if (e.KeyEvent.Key == Key.F1 && PendingFaultInput.Visible)
+                {
+                    Processing.FocusPending();
+                }
+            };
+
             // Event handler for PendingClassificationInput dropdown on down arrow key press
             PendingClassificationInput.KeyPress += (e) =>
             {
@@ -426,13 +435,26 @@ namespace Henkel
             // Handler for when the user changes input in the pending cause item input field
             PendingCauseInput.Leave += (e) =>
             {
-                if (PendingCauseInput.SelectedItem >= 0) { PendingClassificationInput.SetSource(Classification.Classifications[PendingCauseInput.SelectedItem]); }
+                if (PendingCauseInput.SelectedItem >= 0)
+                {
+                    PendingClassificationInput.SetSource(Classification.Classifications[PendingCauseInput.SelectedItem]);
+                    // If ClassificationInput has only one item then select it
+                    if (PendingClassificationInput.Source.Count == 1)
+                    {
+                        PendingClassificationInput.SelectedItem = 0;
+                    }
+                }
             };
 
             // Handler for when the user changes input in the pending classification item input field
             PendingClassificationInput.Leave += (e) =>
             {
-                if (PendingClassificationInput.SelectedItem >= 0) { PendingTypeInput.SetSource(Classification.Types[Classification.ClassificationsPointers[PendingCauseInput.SelectedItem][PendingClassificationInput.SelectedItem]]); }
+                if (PendingClassificationInput.SelectedItem >= 0)
+                {
+                    PendingTypeInput.SetSource(Classification.Types[Classification.ClassificationsPointers[PendingCauseInput.SelectedItem][PendingClassificationInput.SelectedItem]]);
+                    // If PendingTypeInput has only one item then select it
+                    if (PendingTypeInput.Source.Count == 1) { PendingTypeInput.SelectedItem = 0; }
+                }
             };
         }
     }

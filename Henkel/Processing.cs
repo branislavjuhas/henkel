@@ -123,20 +123,33 @@ namespace Henkel
         // Function to approve the pending fault
         public static void Approve()
         {
+            // Set values from the pending GUI elements to the pending fault
+            Fault pending = Faults[Pending[0]];
+
+            pending.FaultText = Interface.PendingFaultInput.Text.ToString();
+            pending.BMK = Interface.PendingBMKInput.Text.ToString();
+            pending.Placement = Interface.PendingPlacementInput.Text.ToString();
+            pending.OrderNumber = Interface.PendingOrderNumberInput.Text.ToString();
+            pending.Cause = Interface.PendingCauseInput.SelectedItem.ToString();
+            pending.CauseIndex = Interface.PendingCauseInput.SelectedItem;
+            pending.Classifications = Interface.PendingClassificationInput.SelectedItem.ToString();
+            pending.ClassificationIndex = Interface.PendingClassificationInput.SelectedItem;
+            pending.Type = Interface.PendingTypeInput.SelectedItem.ToString();
+            pending.TypeIndex = Interface.PendingTypeInput.SelectedItem;
+
             // Add the pending fault to the faults list of the henkel
             // class and remove it form the pending list   
-
-            if (Faults[Pending[0]].Series == "Netstal Series")
+            if (pending.Series == "Netstal Series")
             {
-                Export.NetsalFaults.Add(Faults[Pending[0]]);
+                Export.NetsalFaults.Add(pending);
             }
-            else if (Faults[Pending[0]].Series == "X Series")
+            else if (pending.Series == "X Series")
             {
-                Export.XFaults.Add(Faults[Pending[0]]);
+                Export.XFaults.Add(pending);
             }
             else
             {
-                Export.UndefinedFaults.Add(Faults[Pending[0]]);
+                Export.UndefinedFaults.Add(pending);
             }
 
             Faults.RemoveAt(Pending[0]);

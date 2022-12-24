@@ -14,6 +14,29 @@ namespace Henkel
     {
         public static string Version = "1.1.2";
 
+        // Synonyms for the classifications elements
+        public static string[] Synonyms =
+        {
+            "zlá", "nesprávna",
+            "zlý", "nesprávny"
+
+        };
+
+        // Short forms of classification elements
+        public static string[] Shorts =
+        {
+            "t0", "Preparation",
+            "t1", "Tact 1",
+            "t2", "Tact 2",
+            "t3", "Tact 3",
+            "t4", "Tact 4",
+            "t5", "Tact 5",
+            "av", "AV",
+            "cs", "Construction",
+            "sw", "Software",
+
+        };
+
         // Compute the missing information
         public static void Compute(Fault fault)
         {
@@ -28,13 +51,13 @@ namespace Henkel
 
                 // If the word is shortcut, replace it with the full word
                 // else, replace all characters '_' in the word string by ' ' and store them in the longword string
-                if (Classification.Shorts.Contains(word))
+                if (Shorts.Contains(word))
                 {
-                    longword = Classification.Longs[Array.IndexOf(Classification.Shorts, word)];
+                    longword = Shorts[Array.IndexOf(Shorts, word) + 1];
                 }
                 else
                 {
-                    longword = word.Replace('_', ' ');
+                    longword = rawword.Replace('_', ' ');
                 }
 
                 // Chceck if the longword can be one of the classification elements and apply it
@@ -133,6 +156,18 @@ namespace Henkel
                             else
                             {
                                 distance = GetDamerauLevenshteinDistance(word, classification);
+
+                                // Check if the Synonyms list contains a classification and if yes
+                                // check the Damerau-Levenshtein distance between the word and the synonym
+                                // If the distance is lower than the current distance, set the distance to the new one
+                                if (Synonyms.Contains(classification))
+                                {
+                                    int synonymDistance = GetDamerauLevenshteinDistance(word, GetSynonym(classification));
+                                    if (synonymDistance < distance)
+                                    {
+                                        distance = synonymDistance;
+                                    }
+                                }
                             }
 
 
@@ -247,6 +282,17 @@ namespace Henkel
                 {
                     int distance = GetDamerauLevenshteinDistance(word, word2);
 
+                    // If the word is in the Synonyms list, check the Damerau-Levenshtein distance between the word and the synonym
+                    // If the distance is lower than the current distance, set the distance to the new one
+                    if (Synonyms.Contains(word))
+                    {
+                        int synonymDistance = GetDamerauLevenshteinDistance(word, GetSynonym(word));
+                        if (synonymDistance < distance)
+                        {
+                            distance = synonymDistance;
+                        }
+                    }
+
                     if (distance < minimalDistance)
                     {
                         minimalDistance = distance;
@@ -263,6 +309,7 @@ namespace Henkel
 
             }
 
+
             changes /= words.Length;
 
             // If the changes are less or equal than Settings.CoDistance, subtract 3 from the changes
@@ -273,6 +320,26 @@ namespace Henkel
             }
 
             return changes;
+        }
+
+        // This function is used for selecting synonyms for the given word
+        public static string GetSynonym(string original)
+        {
+            string synonym = "";
+
+            // Get the index of the original word in the Synonyms list
+            // If it is even then synonym is the next word, else it is the previous word
+            int index = Array.IndexOf(Synonyms, original.ToLower());
+            if (index % 2 == 0)
+            {
+                synonym = Synonyms[index + 1];
+            }
+            else
+            {
+                synonym = Synonyms[index - 1];
+            }
+
+            return synonym;
         }
 
         public static int GetDamerauLevenshteinDistance(string s, string t)

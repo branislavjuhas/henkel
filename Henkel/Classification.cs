@@ -12,10 +12,6 @@ namespace Henkel
 {
     internal class Classification
     {
-        // Short variables used for all types of classification
-        public static string[] Shorts = { "t0", "t1", "cp", "ms" };
-        public static string[] Longs = { "Preparation", "Tact 1", "Component", "Missing" };
-
         // Variables used for the classification in the Causes dropdown
         public static string[] Causes = { "Preparation", "Tact 1", "Tact 2", "Tact 3", "Tact 4", "Tact 5", "AV", "External", "Terminal Box", "Storage", "Testing", "Locksmith", "Triatlon", "Construction", "Software", "Lieferant", "Other" };
         public static string[] OriginalCauses = { "KMT Vorbereitung", "KMT Takt1", "KMT Takt2", "KMT Takt3", "KMT Takt4", "KMT Takt5", "KMT AV", "KMT EXTERN", "KMT Klemm Kasten", "KMT Lager", "KMT PRUFUNG", "KMT Schlosserei", "KMT Triatlon", "Konstruktion", "Software", "Lieferant ext.", "KMT Andere" };
