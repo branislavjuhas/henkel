@@ -40,8 +40,8 @@ This project is developed using .NET 6.0, ensuring compatibility with a wide ran
 4. Run the following commands to install the dependencies and build the project:
 
 ```shell
-   dotnet add package NStack.Core --version 1.0.5
-   dotnet add package Terminal.Gui --version 1.8.2
+dotnet add package NStack.Core --version 1.0.5
+dotnet add package Terminal.Gui --version 1.8.2
 ```
 
 ```shell
